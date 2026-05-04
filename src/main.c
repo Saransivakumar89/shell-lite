@@ -1,5 +1,7 @@
 #include "shell-lite.h"
 
+char buff[SIZE];
+
 int main(int argc, char **argv){
 
     if(argc != 1){
@@ -12,14 +14,14 @@ int main(int argc, char **argv){
     while(1){
         printf("shell-lite>> ");
 
-        if(fgets(input, sizeof(input), stdin) == NULL){
+        if(fgets(buff, sizeof(buff), stdin) == NULL){
             break; //EOF
         }
 
         // Removes the newline
-        input[strcspn(input, "\n")] = '\0';
+        buff[strcspn(buff, "\n")] = '\0';
 
-        printf("You entered: %s\n", input);
+        printf("You entered: %s\n", buff);
     }
 
     return 0;
