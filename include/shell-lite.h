@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include<string.h>
+#include<stddef.h>
 #include<stdbool.h>
 
 #include<unistd.h>
