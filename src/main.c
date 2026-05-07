@@ -8,7 +8,7 @@ int main(int argc, char **argv){
         fprintf(stderr, "Usage: %s\n", argv[0]);
         return 1;
     }
-
+    printf("[+]Entered shell-lite\n");
     while(1){
         printf("shell-lite>> ");
 
@@ -20,6 +20,7 @@ int main(int argc, char **argv){
 
 	//exit the shell-lite
         if(strcmp(buff,"exit")==0){
+            printf("[+]Exiting shell-lite\n");
             break;
         }
 	
