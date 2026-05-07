@@ -41,7 +41,7 @@ int main(int argc, char **argv){
         args[i] = NULL;
 
         //creates the child process and executes the process
-        pid_t pid = fork();
+        pid_t pid  =  fork();
 
         if(pid < 0){
             perror("fork");
