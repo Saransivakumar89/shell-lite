@@ -1,59 +1,78 @@
 #include "shell-lite.h"
 
-char buff[SIZE];
+#define SIZE 1024
+#define MAX_ARGS 64
 
-int main(int argc, char **argv){
+int main(void)
+{
+    char buff[SIZE];
 
-    if(argc != 1){
-        fprintf(stderr, "Usage: %s\n", argv[0]);
-        return 1;
-    }
-    printf("[+]Entered shell-lite\n");
-    while(1){
+    printf("[+] Entered shell-lite\n");
+
+    while (1)
+    {
         printf("shell-lite>> ");
+        fflush(stdout);
 
-        if(fgets(buff, sizeof(buff), stdin) == NULL){
+        if (fgets(buff, sizeof(buff), stdin) == NULL)
             break;
-        }
 
         buff[strcspn(buff, "\n")] = '\0';
 
-	//exit the shell-lite
-        if(strcmp(buff,"exit")==0){
-            printf("[+]Exiting shell-lite\n");
+        if (buff[0] == '\0')
+            continue;
+
+        if (strcmp(buff, "exit") == 0)
+        {
+            printf("[+] Exiting shell-lite\n");
             break;
         }
-	
-	//catch the newline
-        if(buff[0]=='\0'){
-            continue;
-        }
 
-        // tokenizes the inputs
-        char *args[10];
+        char *args[MAX_ARGS];
         int i = 0;
 
         char *token = strtok(buff, " ");
-        while (token != NULL && i < 9) {
+
+        while (token != NULL && i < MAX_ARGS - 1)
+        {
             args[i++] = token;
             token = strtok(NULL, " ");
         }
+
         args[i] = NULL;
 
-        //creates the child process and executes the process
-        pid_t pid  =  fork();
+        // built-in cd
+        if (strcmp(args[0], "cd") == 0)
+        {
+            if (args[1] == NULL)
+            {
+                fprintf(stderr, "cd: missing argument\n");
+            }
+            else if (chdir(args[1]) != 0)
+            {
+                perror("cd");
+            }
 
-        if(pid < 0){
+            continue;
+        }
+
+        pid_t pid = fork();
+
+        if (pid < 0)
+        {
             perror("fork");
+            continue;
         }
-        else if(pid == 0){
+
+        if (pid == 0)
+        {
             execvp(args[0], args);
+
             perror("execvp");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
-        else {
-            wait(NULL);
-        }
+
+        waitpid(pid, NULL, 0);
     }
 
     return 0;
