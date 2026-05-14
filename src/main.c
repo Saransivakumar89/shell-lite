@@ -11,7 +11,14 @@ int main(void)
 
     while (1)
     {
-        printf("shell-lite>> ");
+        char cwd[100];
+
+        if(getcwd(cwd,sizeof(buff))!=0){
+            printf("%s$ ", cwd);
+        }
+        else {
+            perror("cwd");
+        }
         fflush(stdout);
 
         if (fgets(buff, sizeof(buff), stdin) == NULL)
